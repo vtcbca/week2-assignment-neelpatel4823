@@ -1,0 +1,71 @@
+Microsoft Windows [Version 10.0.16299.15]
+(c) 2017 Microsoft Corporation. All rights reserved.
+
+C:\Users\scott>cd ../..
+
+C:\>cd sqlite
+
+C:\sqlite>sqlite3 trigger.db
+SQLite version 3.36.0 2021-06-18 18:36:39
+Enter ".help" for usage hints.
+sqlite> .tables
+student_master
+sqlite> select * from student_master
+   ...> ;
+1|Steven King|7
+2|Neena Kochhar|8
+3|Lex De Haan|9
+4|Alexander Hunold|10
+sqlite> create table emp_detail
+   ...> (
+   ...> eid int,
+   ...> efname varchar(15),
+   ...> elname varchar(15),
+   ...> email varchar(15),
+   ...> Ph int,
+   ...> salary int
+   ...> );
+sqlite> create table emp_detail_log
+   ...> (
+   ...> eid int,
+   ...> efname varchar(15),
+   ...> salary int,
+   ...> edittime date
+   ...> );
+sqlite> create trigger emp_detail_after_insert
+   ...> AFTER INSERT on emp_detail
+   ...> begin
+   ...> insert into emp_detail_log
+   ...> values (NEW.eid,NEW.efname,NEW.salary,current_date);
+   ...> end;
+sqlite> insert into emp_detail values(101,'Param','Patel','Param@gmail.com',1234567899,990000);
+sqlite> select * from emp_detail;
+101|NEEL|Patel|NEEL@gmail.com|1234567899|990000
+sqlite> select * from emp_detail_log;
+101|NEEL|990000|2023-07-27
+sqlite> create table student_detail
+   ...> (
+   ...> id int,
+   ...> name varchar(15),
+   ...> semester int,
+   ...> fav_sub varchar(15)
+   ...> );
+sqlite> create table student_detail_log
+   ...> (
+   ...> id int,
+   ...> name varchar(15),
+   ...> semester int,
+   ...> edittime date
+   ...> );
+sqlite> create trigger student_detail_after_insert
+   ...> AFTER INSERT on student_detail
+   ...> begin
+   ...> insert into student_detail_log values(NEW.id,NEW.name,NEW.semester,current_date);
+   ...> end;
+sqlite> insert into student_detail values(10,'NEEL',3,'oop');
+sqlite> select* from student_detail;
+10|NEEL|3|oop
+sqlite> select * from student_detail_log;
+10|NEEL|3|2023-07-27
+sqlite>
+
